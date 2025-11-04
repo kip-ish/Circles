@@ -6,7 +6,7 @@
 
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
-const char* TITLE = "Raylib-Experiment";
+const char* TITLE = "Raylib-Circles";
 
 constexpr int MAX_ENEMIES = 30;
 
@@ -71,6 +71,7 @@ public:
 	}
 
 	void ResetPosition() {
+		dir = (Direction)GetRandomValue(0, 3);
 		pos = RandomizedDirectionPosition(dir);
 	}
 
@@ -99,7 +100,7 @@ private:
 			// move to the left
 		case RIGHT:
 			moveDir.x -= 1.0f;
-			if (pos.x + radius >= 0) {
+			if (pos.x + radius <= 0) {
 				ResetPosition();
 			}
 			break;
@@ -128,7 +129,7 @@ public:
 		ScreenBoundaries();
 	}
 
-	void OnHitEnemy(AIEnemy enemy) {
+	void OnHitEnemy(const AIEnemy& enemy) {
 		if (CheckCollisionCircles(pos, radius, enemy.pos, enemy.radius)) {
 			isDead = true;
 		}
@@ -175,6 +176,7 @@ private:
 
 void MainProgram() {
 	InitWindow(SCR_WIDTH, SCR_HEIGHT, TITLE);
+	SetRandomSeed(time(nullptr));
 	SetTargetFPS(60);
 
 	Player player{ Vector2{SCR_WIDTH / 2 , SCR_HEIGHT / 2}, 20.0f, BLACK };
